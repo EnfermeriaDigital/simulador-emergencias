@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simulador de Emergencias</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; background-color: #f8f9fa; margin: 0; padding: 20px; }
+        .contenedor { max-width: 400px; margin: auto; padding-top: 30px; }
+        h2 { color: #2c3e50; }
+        .btn { display: block; width: 100%; padding: 20px; margin: 15px 0; font-size: 22px; font-weight: bold; color: white; background-color: #e74c3c; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        .btn-inicio { background-color: #3498db; margin-top: 20px; }
+        .btn-descarga { background-color: #27ae60; text-decoration: none; margin-top: 30px; }
+        input { width: 90%; padding: 15px; font-size: 18px; border: 2px solid #bdc3c7; border-radius: 8px; text-align: center; }
+        #mensaje { color: #27ae60; font-weight: bold; font-size: 20px; display: none; margin-top: 20px; }
+        #mensaje-espera { color: #e67e22; font-weight: bold; font-size: 18px; display: none; margin-top: 15px; }
+        .trofeo { font-size: 80px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <!-- Pantalla 1: Login -->
+        <div id="pantalla-login">
+            <h2>Ingreso al Simulador</h2>
+            <p>Ingresa tu nombre para el certificado:</p>
+            <input type="text" id="nombreAlumno" placeholder="Ej: Juan Pérez">
+            <button class="btn btn-inicio" onclick="entrar()">Entrar al Juego</button>
+        </div>
+
+        <!-- Pantalla 2: Juego -->
+        <div id="pantalla-juego" style="display: none;">
+            <h2>Selecciona tu respuesta</h2>
+            <button class="btn" onclick="votar('A')">Opción A</button>
+            <button class="btn" onclick="votar('B')">Opción B</button>
+            <button class="btn" onclick="votar('C')">Opción C</button>
+            <p id="mensaje">¡Respuesta enviada!<br>Mira el proyector.</p>
+            <p id="mensaje-espera">Esperando la siguiente pregunta de la profesora...</p>
+        </div>
+
+        <!-- Pantalla 3: Final -->
+        <div id="pantalla-final" style="display: none; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+            <div class="trofeo" id="trofeo-icono">🏆</div>
+            <h2>¡Simulación Finalizada!</h2>
+            <p id="texto-premio" style="font-size: 22px; color: #2c3e50; margin: 10px 0;"></p>
+            
+            <!-- AQUI APARECERÁ EL CERTIFICADO COMO IMAGEN -->
+            <img id="imagen-certificado" src="" style="width: 100%; border-radius: 10px; margin: 15px 0; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2);" alt="Tu Certificado">
+            <p id="texto-instruccion" style="font-size: 14px; color: #7f8c8d; display: none;">Mantén presionada la imagen para guardarla en tu galería 📸</p>
+            
+            <!-- FORMULARIO NATIVO DE DESCARGA (PDF ORIGINAL) -->
+            <form id="form-descarga" method="GET" action="" target="_blank">
+                <button type="submit" class="btn btn-descarga">📄 Descargar PDF Oficial</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        // Conectar explícitamente a la URL de Render para que escuche a la profesora
+        var socket = io('https://simulador-emergencias-mgim.onrender.com', { 
+            transports: ['websocket'], 
+            upgrade: false,
+            secure: true,
+            reconnection: true,
+            reconnectionAttempts: 10
+        });
+
+        // Este pequeño código nos avisará si el celular logró conectarse
+        socket.on('connect', () => {
+            console.log("¡Conectado al servidor!");
+            document.getElementById('mensaje').style.color = "#27ae60";
+            document.getElementById('mensaje').innerHTML = "¡Conexión establecida!<br>Listo para jugar.";
+            document.getElementById('mensaje').style.display = 'block';
+            setTimeout(() => { document.getElementById('mensaje').style.display = 'none'; }, 3000);
+        });
+        
+        var nombreJugador = "";
+        
+        function entrar() {
+            nombreJugador = document.getElementById('nombreAlumno').value.trim();
+            if(nombreJugador !== "") {
+                document.getElementById('pantalla-login').style.display = 'none';
+                document.getElementById('pantalla-juego').style.display = 'block';
+            } else {
+                alert("Por favor, ingresa tu nombre.");
+            }
+        }
+
+        function votar(opcion) {
+            // Enviamos el voto a la profesora
+            socket.emit('enviar_respuesta', {opcion: opcion, nombre: nombreJugador});
+            
+            // Bloqueamos los botones
+            let botones = document.querySelectorAll('#pantalla-juego .btn');
+            botones.forEach(b => b.disabled = true);
+            
+            // Mostramos el mensaje temporal
+            document.getElementById('mensaje').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('mensaje').style.display = 'none';
+                document.getElementById('mensaje-espera').style.display = 'block';
+            }, 3000);
+        }
+
+        // Cuando la profesora presiona el botón "Habilitar Respuestas"
+        socket.on('nueva_pregunta', function() {
+            // Desbloquear botones en el celular
+            let botones = document.querySelectorAll('#pantalla-juego .btn');
+            botones.forEach(b => b.disabled = false);
+            
+            // Ocultar textos de espera
+            document.getElementById('mensaje').style.display = 'none';
+            document.getElementById('mensaje-espera').style.display = 'none';
+        });
+
+        // Cuando la profesora emite los certificados
+        socket.on('juego_terminado', function(premios) {
+            document.getElementById('pantalla-juego').style.display = 'none';
+            document.getElementById('pantalla-final').style.display = 'block';
+            
+            let datosPremio = premios[nombreJugador];
+            
+            if(datosPremio) {
+                // Mostramos el texto del título ganado
+                document.getElementById('texto-premio').innerHTML = "Galardón Obtenido:<br><b>" + datosPremio.titulo + "</b>";
+                
+                // Mostramos la imagen gigante del certificado
+                if(datosPremio.imagen && datosPremio.imagen !== "") {
+                    document.getElementById('trofeo-icono').style.display = 'none'; // Ocultamos el trofeo emoji
+                    document.getElementById('imagen-certificado').src = "data:image/png;base64," + datosPremio.imagen;
+                    document.getElementById('imagen-certificado').style.display = 'block';
+                    document.getElementById('texto-instruccion').style.display = 'block';
+                }
+            } else {
+                document.getElementById('texto-premio').innerHTML = "Galardón Obtenido:<br><b>Especialista en Emergencias</b>";
+            }
+            
+            // Preparamos el botón del PDF por si acaso
+            let nombreArchivo = nombreJugador.replace(/ /g, '_');
+            document.getElementById('form-descarga').action = "https://simulador-emergencias-mgim.onrender.com/descargar_certificado/" + encodeURIComponent(nombreArchivo);
+        });
+    </script>
+</body>
+</html>
