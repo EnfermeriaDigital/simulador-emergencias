@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simulador de Emergencias</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; background-color: #f8f9fa; margin: 0; padding: 20px; }
+        .contenedor { max-width: 400px; margin: auto; padding-top: 30px; }
+        h2 { color: #2c3e50; }
+        .btn { display: block; width: 100%; padding: 20px; margin: 15px 0; font-size: 22px; font-weight: bold; color: white; background-color: #e74c3c; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        .btn-inicio { background-color: #3498db; margin-top: 20px; }
+        .btn-descarga { background-color: #27ae60; text-decoration: none; margin-top: 30px; }
+        input { width: 90%; padding: 15px; font-size: 18px; border: 2px solid #bdc3c7; border-radius: 8px; text-align: center; }
+        #mensaje { color: #27ae60; font-weight: bold; font-size: 20px; display: none; margin-top: 20px; }
+        #mensaje-espera { color: #e67e22; font-weight: bold; font-size: 18px; display: none; margin-top: 15px; }
+        .trofeo { font-size: 80px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <!-- Pantalla 1: Login -->
+        <div id="pantalla-login">
+            <h2>Ingreso al Simulador</h2>
+            <p>Ingresa tu nombre para el certificado:</p>
+            <input type="text" id="nombreAlumno" placeholder="Ej: Juan Pérez">
+            <button class="btn btn-inicio" onclick="entrar()">Entrar al Juego</button>
+        </div>
+
+        <!-- Pantalla 2: Juego -->
+        <div id="pantalla-juego" style="display: none;">
+            <h2>Selecciona tu respuesta</h2>
+            <button class="btn" onclick="votar('A')">Opción A</button>
+            <button class="btn" onclick="votar('B')">Opción B</button>
+            <button class="btn" onclick="votar('C')">Opción C</button>
+            <p id="mensaje">¡Respuesta enviada!<br>Mira el proyector.</p>
+            <p id="mensaje-espera">Esperando la siguiente pregunta de la profesora...</p>
+        </div>
+
+        <!-- Pantalla 3: Final -->
+        <div id="pantalla-final" style="display: none; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+            <div class="trofeo">🏆</div>
+            <h2>¡Simulación Finalizada!</h2>
+            <p style="font-size: 18px; color: #7f8c8d;">Tu resultado ha sido procesado.</p>
+            <p id="texto-premio" style="font-size: 22px; color: #2c3e50; margin: 20px 0;"></p>
+            
+            <a id="enlace-descarga" href="#" class="btn btn-descarga">📄 Descargar PDF Oficial</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        // CORRECCIÓN CLAVE: Forzamos el tipo de conexión para Render
+        var socket = io({ transports: ['websocket', 'polling'] });
+        var nombreJugador = "";
+        
+        function entrar() {
+            nombreJugador = document.getElementById('nombreAlumno').value.trim();
+            if(nombreJugador !== "") {
+                document.getElementById('pantalla-login').style.display = 'none';
+                document.getElementById('pantalla-juego').style.display = 'block';
+            } else {
+                alert("Por favor, ingresa tu nombre.");
+            }
+        }
+
+        function votar(opcion) {
+            // Enviamos el voto
+            socket.emit('enviar_respuesta', {opcion: opcion, nombre: nombreJugador});
+            
+            // Bloqueamos los botones para que no vote dos veces
+            let botones = document.querySelectorAll('#pantalla-juego .btn');
+            botones.forEach(b => b.disabled = true);
+            
+            // Mostramos los mensajes
+            document.getElementById('mensaje').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('mensaje').style.display = 'none';
+                document.getElementById('mensaje-espera').style.display = 'block';
+            }, 3000);
+        }
+
+        // NUEVO: Escuchar cuando la profesora cambia de diapositiva (desde app.py)
+        socket.on('nueva_pregunta', function() {
+            // Desbloquear botones
+            let botones = document.querySelectorAll('#pantalla-juego .btn');
+            botones.forEach(b => b.disabled = false);
+            // Ocultar mensajes
+            document.getElementById('mensaje').style.display = 'none';
+            document.getElementById('mensaje-espera').style.display = 'none';
+        });
+
+        // Escuchar cuando la instructora termina el juego
+        socket.on('juego_terminado', function(premios) {
+            document.getElementById('pantalla-juego').style.display = 'none';
+            document.getElementById('pantalla-final').style.display = 'block';
+            
+            let miPremio = premios[nombreJugador];
+            document.getElementById('texto-premio').innerHTML = "Galardón Obtenido:<br><b>" + miPremio + "</b>";
+            
+            let enlace = "/descargar_certificado/" + encodeURIComponent(nombreJugador);
+            document.getElementById('enlace-descarga').href = enlace;
+        });
+    </script>
+</body>
+</html>
