@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simulador de Emergencias</title>
+    <!-- Librería mágica para el papel picado (Confetti) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; background-color: #f8f9fa; margin: 0; padding: 20px; }
+        .contenedor { max-width: 400px; margin: auto; padding-top: 30px; }
+        h2 { color: #2c3e50; }
+        .btn { display: block; width: 100%; padding: 20px; margin: 15px 0; font-size: 22px; font-weight: bold; color: white; background-color: #e74c3c; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        .btn-inicio { background-color: #3498db; margin-top: 20px; }
+        input { width: 90%; padding: 15px; font-size: 18px; border: 2px solid #bdc3c7; border-radius: 8px; text-align: center; }
+        #mensaje { color: #27ae60; font-weight: bold; font-size: 20px; display: none; margin-top: 20px; }
+        #mensaje-espera { color: #e67e22; font-weight: bold; font-size: 18px; display: none; margin-top: 15px; }
+        
+        /* EL DISEÑO DEL DIPLOMA DIGITAL */
+        .certificado-digital {
+            border: 8px solid #c0392b;
+            padding: 30px 20px;
+            background: #fffdf7;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+        .cert-header { color: #7f8c8d; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; }
+        .cert-title { color: #c0392b; font-size: 32px; font-weight: bold; margin: 10px 0; }
+        .cert-name { color: #2c3e50; font-size: 38px; font-weight: bold; border-bottom: 2px solid #bdc3c7; display: inline-block; padding-bottom: 5px; margin: 20px 0; font-family: 'Georgia', serif; }
+        .cert-footer { color: #34495e; font-size: 18px; margin-top: 20px; font-style: italic; }
+        .sello { font-size: 60px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <!-- Pantalla 1: Login -->
+        <div id="pantalla-login">
+            <h2>Ingreso al Simulador</h2>
+            <p>Ingresa tu nombre para el certificado:</p>
+            <input type="text" id="nombreAlumno" placeholder="Ej: Juan Pérez">
+            <button class="btn btn-inicio" onclick="entrar()">Entrar al Juego</button>
+        </div>
+
+        <!-- Pantalla 2: Juego -->
+        <div id="pantalla-juego" style="display: none;">
+            <h2>Selecciona tu respuesta</h2>
+            <button class="btn" onclick="votar('A')">Opción A</button>
+            <button class="btn" onclick="votar('B')">Opción B</button>
+            <button class="btn" onclick="votar('C')">Opción C</button>
+            <p id="mensaje">¡Respuesta enviada!<br>Mira el proyector.</p>
+            <p id="mensaje-espera">Esperando la siguiente pregunta de la profesora...</p>
+        </div>
+
+        <!-- Pantalla 3: DIPLOMA DIGITAL Y FIESTA -->
+        <div id="pantalla-final" style="display: none;">
+            <div class="certificado-digital">
+                <div class="cert-header">Certificado de Excelencia</div>
+                <div style="font-size: 18px; color: #34495e; margin-top: 15px;">Otorgado a:</div>
+                <div class="cert-name" id="cert-nombre">Juan Pérez</div>
+                
+                <div style="font-size: 18px; color: #34495e;">Por haber obtenido el galardón de:</div>
+                <div class="cert-title" id="cert-galardon">Especialista</div>
+                
+                <div class="sello">🎖️</div>
+                <div class="cert-footer">Simulador de Emergencias Médicas</div>
+            </div>
+            
+            <p style="color: #7f8c8d; font-size: 14px; margin-top: 20px;">Toma una captura de pantalla (Screenshot) para guardarlo.</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io('https://simulador-emergencias-mgim.onrender.com', { transports: ['websocket'] });
+        var nombreJugador = "";
+        
+        socket.on('connect', () => {
+            console.log("¡Conectado al servidor!");
+            document.getElementById('mensaje').style.color = "#27ae60";
+            document.getElementById('mensaje').innerHTML = "¡Conexión establecida!<br>Listo para jugar.";
+            document.getElementById('mensaje').style.display = 'block';
+            setTimeout(() => { document.getElementById('mensaje').style.display = 'none'; }, 3000);
+        });
+
+        function entrar() {
+            nombreJugador = document.getElementById('nombreAlumno').value.trim();
+            if(nombreJugador !== "") {
+                document.getElementById('pantalla-login').style.display = 'none';
+                document.getElementById('pantalla-juego').style.display = 'block';
+            } else {
+                alert("Por favor, ingresa tu nombre.");
+            }
+        }
+
+        function votar(opcion) {
+            socket.emit('enviar_respuesta', {opcion: opcion, nombre: nombreJugador});
+            let botones = document.querySelectorAll('#pantalla-juego .btn');
+            botones.forEach(b => b.disabled = true);
+            document.getElementById('mensaje').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('mensaje').style.display = 'none';
+                document.getElementById('mensaje-espera').style.display = 'block';
+            }, 3000);
+        }
+
+        socket.on('nueva_pregunta', function() {
+            let botones = document.querySelectorAll('#pantalla-juego .btn');
+            botones.forEach(b => b.disabled = false);
+            document.getElementById('mensaje').style.display = 'none';
+            document.getElementById('mensaje-espera').style.display = 'none';
+        });
+
+        // ==========================================
+        // LA MAGIA OCURRE AQUÍ: EL CERTIFICADO DIGITAL
+        // ==========================================
+        socket.on('juego_terminado', function(premios) {
+            document.getElementById('pantalla-juego').style.display = 'none';
+            document.getElementById('pantalla-final').style.display = 'block';
+            
+            // Llenar el diploma con los datos del alumno
+            let datosPremio = premios[nombreJugador];
+            let tituloGanado = datosPremio ? datosPremio.titulo : "Especialista en Emergencias";
+            
+            document.getElementById('cert-nombre').innerText = nombreJugador;
+            document.getElementById('cert-galardon').innerText = tituloGanado;
+            
+            // ¡EFECTO DE CONFETI (PAPEL PICADO)!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#e74c3c', '#f1c40f', '#3498db', '#27ae60']
+            });
+            
+            // Una segunda explosión un segundo después para más emoción
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 100,
+                    origin: { y: 0.5 },
+                    colors: ['#e74c3c', '#f1c40f', '#3498db', '#27ae60']
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
