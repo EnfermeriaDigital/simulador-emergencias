@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Especialista en Emergencias Médicas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css">
+    <!-- Tema claro para toda la presentación -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css">
+    
+    <style>
+        .reveal h1 { color: #c0392b; font-weight: bold; font-size: 55px; text-transform: uppercase; }
+        .reveal h2 { color: #2c3e50; font-weight: bold; font-size: 45px; border-bottom: 3px solid #e74c3c; padding-bottom: 10px; }
+        .reveal p, .reveal li { font-size: 28px; color: #2c3e50; line-height: 1.6; text-align: left; }
+        .qr-box { background: white; padding: 15px; border-radius: 15px; border: 4px solid #e74c3c; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .caja-alerta { background-color: #fdf2e9; border-left: 8px solid #e67e22; padding: 15px 25px; margin: 20px 0; }
+        .mito-falso { color: #e74c3c; font-weight: bold; font-size: 60px; text-align: center; margin-top: 20px; border: 5px solid #e74c3c; display: inline-block; padding: 10px 30px; transform: rotate(-5deg); background: #fce4ec; }
+        .mito-verdad { color: #27ae60; font-weight: bold; font-size: 60px; text-align: center; margin-top: 20px; border: 5px solid #27ae60; display: inline-block; padding: 10px 30px; transform: rotate(5deg); background: #eafaf1; }
+        .img-clinica { border-radius: 10px; max-height: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); margin: 15px auto; display: block; }
+        .video-box { border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin: 20px auto; display: block; border: 5px solid #34495e; }
+        .tabla-medica { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 22px; }
+        .tabla-medica th { background-color: #34495e; color: white; padding: 10px; text-align: center; }
+        .tabla-medica td { padding: 10px; border: 1px solid #bdc3c7; text-align: center; background: #f8f9fa; }
+        /* ESTILO PARA LOS BOTONES DE LA PROFESORA */
+        .btn-activar { background: #2c3e50; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; margin-top: 15px; font-weight: bold; font-size: 20px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-activar:active { background: #27ae60; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- PORTADA PARA LA NUBE (RENDER) -->
+            <section data-background-color="#ffffff">
+                <h1>Soporte Vital y Trauma</h1>
+                <h3 style="color: #7f8c8d;">Especialista en Emergencias Médicas</h3>
+                
+                <div style="background: #fdf2e9; border: 4px solid #e74c3c; border-radius: 15px; padding: 30px; margin-top: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <p style="color: #c0392b; font-weight: bold; font-size: 35px; text-align: center; margin: 0;">¡Únete al Simulador de Casos Clínicos!</p>
+                    
+                    <div style="display: flex; justify-content: center; margin-top: 20px;">
+                        <ol style="font-size: 28px; text-align: left; line-height: 1.8;">
+                            <li>Puedes usar tus datos móviles (4G) o el WiFi.</li>
+                            <li>Abre el navegador de tu celular (Chrome o Safari).</li>
+                            <li>Escribe este enlace oficial y presiona "Ir":</li>
+                        </ol>
+                    </div>
+                    
+                    <!-- ENLACE OFICIAL DE RENDER -->
+                    <div style="background: #2c3e50; color: white; font-size: 50px; font-weight: bold; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; letter-spacing: 2px;">
+                        simulador-emergencias-mgim.onrender.com/alumno
+                    </div>
+                    <p style="font-size: 20px; color: #7f8c8d; text-align: center; margin-top: 15px;">*No necesitas descargar ninguna aplicación.</p>
+                </div>
+            </section>
+
+            <!-- ================= MÓDULO 1: SISTEMA NERVIOSO ================= -->
+            <section>
+                <section data-background-color="#ebf5fb">
+                    <h2>Módulo 1: Sistema Nervioso</h2>
+                    <div class="caja-alerta"><p><b>QUIZ:</b> El líquido que protege al SNC es...</p></div>
+                    
+                    <!-- BOTÓN AÑADIDO AQUÍ -->
+                    <button class="btn-activar" onclick="activarPregunta(this, 'nervioso', 'B')">📲 Habilitar Respuestas en Celulares</button>
+
+                    <div style="display: flex; justify-content: center; gap: 30px; font-size: 24px; margin-top: 20px;">
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #3498db;">A) Linfa</div>
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #e74c3c;">B) Líquido Cefalorraquídeo</div>
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #f1c40f;">C) Sangre</div>
+                    </div>
+                    <div style="width: 80%; margin: auto; background: white; padding: 10px; border-radius: 10px; margin-top: 20px;"><canvas id="graficoNervioso" height="80"></canvas></div>
+                </section>
+
+                <section data-background-color="#ffffff"><h2>El Centro de Mando</h2><div style="display: flex; gap: 20px;"><div><p>El cerebro humano es extremadamente sensible a la hipoxia. En el trauma, <b>el tiempo es tejido</b>.</p><ul><li><b>Cerebelo:</b> Coordina el movimiento.</li><li><b>Bulbo Raquídeo:</b> Regula latidos y respiración.</li><li><b>Cuerpo Calloso:</b> Conecta ambos hemisferios.</li></ul></div><img src="https://elbibliote.com/resources/Temas/html/imageneshtml/1889/1889a.jpg" class="img-clinica"></div></section>
+                <section data-background-color="#f8f9fa">
+                    <h2>Las Meninges</h2>
+                    <div style="display: flex; gap: 30px; align-items: center; justify-content: center; margin-top: 20px;">
+                        <div style="flex: 1; text-align: left;">
+                            <p>Tres capas que protegen el cerebro bajo el cráneo:</p>
+                            <ol>
+                                <li><b>Duramadre:</b> Capa gruesa pegada al hueso.</li>
+                                <li><b>Aracnoides:</b> Contiene vasos sanguíneos.</li>
+                                <li><b>Piamadre:</b> Membrana fina sobre el tejido cerebral.</li>
+                            </ol>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <img src="https://www.mayoclinic.org/-/media/kcms/gbs/patient-consumer/images/2013/08/26/11/03/ds00901_im03177_r7_meningesthu_jpg.jpg" class="img-clinica" style="max-width: 100%; max-height: 400px; object-fit: contain; margin: 0 auto;">
+                        </div>
+                    </div>
+                </section>
+                <section data-background-color="#ffffff"><h2>Presión Intracraneal (PIC)</h2><p>El cráneo no se expande. Si hay un sangrado interno, la presión aplasta el cerebro contra la base del cráneo.</p><ul><li><b>Síntomas clave:</b> Dolor de cabeza severo, vómito en proyectil, alteraciones visuales.</li><li><b>Anisocoria:</b> Una pupila más dilatada que la otra (signo de daño cerebral grave inminente).</li></ul></section>
+                <section data-background-color="#eafaf1">
+                    <h2>Mito o Verdad</h2>
+                    <p style="text-align: center; font-size: 35px; font-style: italic;">"No debes dejar dormir a una persona que sufrió una conmoción cerebral severa."</p>
+                    <div class="fragment"><div class="mito-falso">¡FALSO!</div></div>
+                    <p class="fragment" style="text-align: center;">El cerebro necesita reposo para sanar. Solo se debe despertar si hay indicación médica para evaluar la Escala de Glasgow.</p>
+                </section>
+                <section data-background-color="#ffffff"><h2>Trauma Craneoencefálico (TCE)</h2><div style="display: flex; gap: 20px;"><div><ul><li><b>Fractura de base de cráneo:</b> Salida de líquido cefalorraquídeo por nariz oídos.</li><li><b>Signo de Battle:</b> Hematoma detrás de la oreja.</li><li><b>Ojos de Mapache:</b> Hematomas alrededor de los ojos.</li></ul></div><img src="https://www.nei.nih.gov/sites/default/files/styles/square_medium/public/2019-03/Idio-intra-hypertension-GettyImages-643310504%20copy.jpg?itok=e_pxQmoC"></div></section>
+                <section data-background-color="#fdf2e9">
+                    <h2>Escala de Glasgow (GCS)</h2>
+                    <p>Evalúa el nivel de conciencia. Va de 3 a 15 puntos.</p>
+                    <table class="tabla-medica">
+                        <tr><th>Apertura Ocular (4)</th><th>Verbal (5)</th><th>Motora (6)</th></tr>
+                        <tr><td>4 - Espontánea</td><td>5 - Orientada</td><td>6 - Obedece órdenes</td></tr>
+                        <tr><td>3 - A la orden verbal</td><td>4 - Confusa</td><td>5 - Localiza dolor</td></tr>
+                        <tr><td>2 - Al dolor</td><td>3 - Inapropiada</td><td>4 - Retira al dolor</td></tr>
+                        <tr><td>1 - Ninguna</td><td>2 - Incomprensible</td><td>3 - Flexión anormal</td></tr>
+                        <tr><td></td><td>1 - Ninguna</td><td>2 - Extensión anormal</td></tr>
+                        <tr><td></td><td></td><td>1 - Ninguna</td></tr>
+                    </table>
+                    <p style="color: #c0392b; font-weight: bold; text-align: center; margin-top: 10px;">Glasgow ≤ 8 = Asegurar Vía Aérea (Intubación).</p>
+                </section>
+                <section data-background-color="#e8f8f5">
+                    <h2>CASO CLÍNICO DE ANÁLISIS</h2>
+                    <p>Cae un obrero de 4 metros. Al evaluarlo:</p>
+                    <ul>
+                        <li>Tiene los ojos cerrados, pero los abre al gritarle.</li>
+                        <li>Al preguntarle su nombre, solo emite quejidos.</li>
+                        <li>Al pellizcarle el hombro, aleja tu mano con la suya.</li>
+                    </ul>
+                    <p class="fragment" style="color: #27ae60; font-weight: bold; text-align: center; font-size: 35px;">Resultado: Ojos(3) + Verbal(2) + Motor(5) = GCS 10</p>
+                </section>
+                <section data-background-color="#ffffff"><h2>Trauma Raquimedular</h2><p>La médula espinal conecta el cerebro con el cuerpo. Una lesión cervical (C1 a C4) paraliza el diafragma y causa la muerte por asfixia.</p><p style="color: #c0392b; font-weight: bold; text-align: center;">REGLA: Todo paciente de trauma tiene lesión cervical hasta que se demuestre lo contrario en rayos X.</p></section>
+                <section data-background-color="#f8f9fa"><h2>Inmovilización Cervical</h2><ol><li><b>Rescatista 1:</b> Toma la cabeza en posición neutra y no la suelta bajo ningún motivo.</li><li><b>Evaluación:</b> Revisar cuello buscando deformidades, heridas o desviación de la tráquea.</li><li><b>Medición:</b> Medir con los dedos la distancia del trapecio a la mandíbula.</li><li><b>Colocación:</b> Rescatista 2 ajusta y coloca el collar.</li></ol></section>
+                <section data-background-color="#ffffff"><h2>Video: Colocación de Collar</h2>
+                    <p style="text-align: center;">Observa la coordinación entre ambos rescatistas.</p>
+                    <iframe width="600" height="350" src="https://www.youtube.com/embed/EGWk29_DgmA" title="Collar Cervical" frameborder="0" allowfullscreen class="video-box"></iframe>
+                </section>
+                <section data-background-color="#fce4ec"><h2>Errores Frecuentes en Trauma</h2><ul><li>Soltar la cabeza del paciente después de poner el collar (el collar NO inmoviliza al 100%, solo restringe el movimiento).</li><li>Poner un collar de talla incorrecta (puede estrangular).</li><li>Forzar la posición neutra del cuello si hay resistencia física o dolor extremo al intentarlo.</li></ul></section>
+                <section data-background-color="#ffffff"><h2 style="color: #27ae60;">PRÁCTICA: Escenario de Trauma</h2><p style="text-align: center;"><b>Equipos de 2 personas:</b></p><ol><li>Acercamiento seguro y control cervical manual.</li><li>Evaluación rápida de Glasgow.</li><li>Medición e instalación del collarín.</li></ol><p style="text-align: center; font-weight: bold; font-size: 40px; color: #c0392b; margin-top: 30px;">¡A LOS MANIQUÍES!</p></section>
+            </section>
+
+            <!-- ================= MÓDULO 2: CARDIORRESPIRATORIO ================= --> 
+            <section>
+                <section data-background-color="#fdf2e9">
+                    <h2>Módulo 2: Cardiorrespiratorio</h2>
+                    <div class="caja-alerta"><p><b>QUIZ:</b> El sistema que transporta oxígeno es...</p></div>
+                    
+                    <!-- BOTÓN AÑADIDO AQUÍ -->
+                    <button class="btn-activar" onclick="activarPregunta(this, 'cardio', 'C')">📲 Habilitar Respuestas en Celulares</button>
+
+                    <div style="display: flex; justify-content: center; gap: 30px; font-size: 24px; margin-top: 20px;">
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #3498db;">A) Sist. Nervioso</div>
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #e74c3c;">B) Sist. Respiratorio</div>
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #f1c40f;">C) Sist. Circulatorio</div>
+                    </div>
+                    <div style="width: 80%; margin: auto; background: white; padding: 10px; border-radius: 10px; margin-top: 20px;"><canvas id="graficoCardio" height="80"></canvas></div>
+                </section>
+
+                <section data-background-color="#ffffff"><h2>La Vía Aérea</h2><div style="display: flex; gap: 20px;"><div><p>El oxígeno debe llegar a los pulmones. En un paciente inconsciente, <b>la lengua cae hacia atrás</b> y bloquea la garganta.</p><ul><li><b>Pacientes clínicos:</b> Maniobra Frente-Mentón.</li><li><b>Pacientes trauma:</b> Tracción Mandibular.</li></ul></div><img src="https://juanantonioroyoprats.wordpress.com/wp-content/uploads/2012/01/apnea_airway_sleeping_pi.jpg" class="img-clinica"></div></section>
+                <section data-background-color="#f8f9fa"><h2>El Corazón como Bomba</h2><p>Músculo de 4 cavidades que trabaja sin descanso.</p><ul><li><b>Lado Derecho:</b> Bombea sangre sin oxígeno hacia los pulmones.</li><li><b>Lado Izquierdo:</b> Bombea la sangre recién oxigenada a todo el cuerpo.</li><li><b>Infarto:</b> Una arteria del corazón se tapa y el músculo muere por falta de sangre.</li></ul></section>
+                <section data-background-color="#ffffff"><h2>Paro Cardiorrespiratorio</h2><p>El corazón deja de latir de forma eficaz. El paciente colapsa, <b>no responde y no respira</b> (o tiene respiración agónica/jadeo).</p><p style="text-align: center; font-size: 35px; background: #fce4ec; padding: 15px; border-radius: 10px; color: #c0392b;">Un paciente en paro está clínicamente muerto. La RCP sustituye al corazón para mantener el cerebro vivo.</p></section>
+                <section data-background-color="#eafaf1">
+                    <h2>Mito o Verdad</h2>
+                    <p style="text-align: center; font-size: 35px; font-style: italic;">"Hacerle RCP a alguien que solo estaba desmayado (y no en paro) puede causarle un daño cardíaco fatal."</p>
+                    <div class="fragment"><div class="mito-falso">¡FALSO!</div></div>
+                    <p class="fragment" style="text-align: center;">El riesgo de daño es mínimo (quizás costillas rotas) frente al beneficio de salvar una vida. Si no estaba en paro, el paciente se quejará del dolor al primer empuje.</p>
+                </section>
+                <section data-background-color="#ffffff"><h2>Cadena de Supervivencia AHA</h2><ol><li>Llamada inmediata a emergencias (911).</li><li><b>RCP de alta calidad desde el primer minuto.</b></li><li>Desfibrilación rápida con DEA.</li><li>Soporte Vital Avanzado (Ambulancia).</li><li>Cuidados Integrales Posparo.</li><li>Recuperación clínica.</li></ol></section>
+                <section data-background-color="#f8f9fa"><h2>Técnica de RCP de Alta Calidad</h2><div class="caja-alerta"><p>Protocolo CAB: Compresiones, Vía Aérea, Ventilación.</p></div><ul><li><b>Ritmo:</b> 100 a 120 por minuto (Ritmo de la canción "Stayin' Alive").</li><li><b>Profundidad:</b> Mínimo 5 cm, máximo 6 cm.</li><li><b>Expansión:</b> Permitir que el pecho regrese arriba del todo.</li><li><b>Ciclo:</b> 30 compresiones y 2 ventilaciones.</li></ul></section>
+                <section data-background-color="#ffffff"><h2>Video: Dinámica de RCP</h2>
+                    <p style="text-align: center;">Observa la postura de los brazos (rectos, sin doblar codos).</p>
+                    <iframe width="600" height="350" src="https://www.youtube.com/embed/uDEhALPUxzM" title="RCP" frameborder="0" allowfullscreen class="video-box"></iframe>
+                </section>
+                <section data-background-color="#f8f9fa"><h2>Desfibrilador Externo Automático (DEA)</h2><p>El corazón en paro suele estar temblando (fibrilación). El DEA aplica un choque para "reiniciarlo".</p><ol><li><b>Paso 1: ENCENDER EL EQUIPO.</b></li><li>Colocar los parches en el pecho desnudo y seco.</li><li>Alejarse mientras el equipo analiza.</li><li>Presionar el botón de choque si la máquina lo pide.</li><li>Reiniciar las compresiones INMEDIATAMENTE.</li></ol></section>
+                <section data-background-color="#fce4ec"><h2>Errores Críticos en RCP y DEA</h2><ul><li>Interrumpir las compresiones por más de 10 segundos.</li><li>Tocar al paciente mientras el DEA analiza (el DEA leerá el latido del rescatista).</li><li>Usar el DEA sobre un pecho mojado, con parches de medicación o sobre un marcapasos visible.</li></ul></section>
+                <section data-background-color="#e8f8f5">
+                    <h2>CASO CLÍNICO DE ANÁLISIS</h2>
+                    <p>Estás en un restaurante y un señor se atraganta con un trozo de carne. Tose muy fuerte y se pone rojo.</p>
+                    <p style="text-align: center; margin-top: 20px;">¿Qué haces? ¿Le golpeas la espalda? ¿Le haces Heimlich?</p>
+                    <h3 class="fragment" style="color: #e67e22; text-align: center; margin-top: 30px;">¡NINGUNA! Si tose fuerte, es una obstrucción parcial. Solo debes animarlo a seguir tosiendo.</h3>
+                </section>
+                <section data-background-color="#ffffff"><h2>Obstrucción Total (OVACE)</h2><p>El paciente no puede toser, no habla y se lleva las manos al cuello (Signo universal de asfixia).</p><ul><li><b>Maniobra de Heimlich:</b> Compresiones abdominales rápidas y fuertes hacia adentro y hacia arriba (forma de "J").</li><li><b>Pacientes obesos o embarazadas:</b> Las compresiones se hacen en el pecho, sobre el esternón.</li></ul></section>
+                <section data-background-color="#ffffff"><h2>Video: Maniobra de Heimlich</h2>
+                    <p style="text-align: center;">Posición correcta de las manos (puño cerrado con pulgar hacia el ombligo).</p>
+                    <iframe width="600" height="350" src="https://www.youtube.com/embed/7CgtIgSyAiU" title="Heimlich" frameborder="0" allowfullscreen class="video-box"></iframe>
+                </section>
+                <section data-background-color="#ffffff"><h2 style="color: #27ae60;">PRÁCTICA: Escenario Cardíaco</h2><p style="text-align: center;"><b>En equipos:</b></p><ol><li>Reconocimiento del paro e inicio de RCP 30:2.</li><li>Uso correcto de la mascarilla de bolsillo.</li><li>Llegada y aplicación del DEA de entrenamiento.</li></ol><p style="text-align: center; font-weight: bold; font-size: 40px; color: #c0392b; margin-top: 30px;">¡A LOS MANIQUÍES!</p></section>
+            </section>
+
+            <!-- ================= MÓDULO 3: METABÓLICO, INMUNE Y TRAUMA ================= -->
+            <section>
+                <section data-background-color="#eafaf1">
+                    <h2>Módulo 3: Metabolismo y Piel</h2>
+                    <div class="caja-alerta"><p><b>QUIZ:</b> La función del sistema endocrino es...</p></div>
+                    
+                    <!-- BOTÓN AÑADIDO AQUÍ -->
+                    <button class="btn-activar" onclick="activarPregunta(this, 'metabolico', 'A')">📲 Habilitar Respuestas en Celulares</button>
+
+                    <div style="display: flex; justify-content: center; gap: 30px; font-size: 24px; margin-top: 20px;">
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #3498db;">A) Producir hormonas</div>
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #e74c3c;">B) Transp. oxígeno</div>
+                        <div style="background: white; padding: 15px; border-bottom: 5px solid #f1c40f;">C) Proteger la piel</div>
+                    </div>
+                    <div style="width: 80%; margin: auto; background: white; padding: 10px; border-radius: 10px; margin-top: 20px;"><canvas id="graficoMetabolico" height="80"></canvas></div>
+                </section>
+
+                <section data-background-color="#ffffff">
+                    <h2>Sistema Endocrino y Diabetes</h2>
+                    <div style="display: flex; gap: 20px; align-items: center;">
+                        <div style="flex: 1;">
+                            <p>La <b>Insulina</b> (hormona del páncreas) es la llave que deja entrar la glucosa a la célula.</p>
+                            <ul>
+                                <li><b>Hipoglucemia (Azúcar baja):</b> Piel pálida y sudorosa, agresividad, inicio rápido. Es mortal.</li>
+                                <li><b>Hiperglucemia (Azúcar alta):</b> Piel seca, mucha orina, aliento afrutado. Inicio lento.</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <img src="https://www.chospab.es/cursos_on_line/insulino/images/pic004.jpg" class="img-clinica" style="max-width: 100%; max-height: 400px; object-fit: contain;">
+                        </div>
+                    </div>
+                </section>
+                <section data-background-color="#eafaf1">
+                    <h2>Mito o Verdad</h2>
+                    <p style="text-align: center; font-size: 35px; font-style: italic;">"A un diabético inconsciente debes ponerle azúcar debajo de la lengua."</p>
+                    <div class="fragment"><div class="mito-falso">¡FALSO!</div></div>
+                    <p class="fragment" style="text-align: center;">NUNCA introduzcas nada en la boca de una persona inconsciente. Se puede ahogar o el azúcar puede irse a los pulmones. Llama a la ambulancia.</p>
+                </section>
+                <section data-background-color="#f8f9fa"><h2>Sistema Inmune y Anafilaxia</h2><p>La anafilaxia es una reacción alérgica extrema que afecta todo el cuerpo rápidamente (ej. picadura de abeja, maní).</p><ul><li><b>Signos:</b> Ronchas en todo el cuerpo, hinchazón de labios/lengua, dificultad para respirar.</li><li><b>Manejo:</b> Aplicar el Autoinyector de Epinefrina (EpiPen) en la cara externa del muslo por 3 a 10 segundos, incluso sobre la ropa.</li></ul></section>
+                <section data-background-color="#ffffff"><h2>Sistema Tegumentario (Piel)</h2><p>El órgano más grande. Nos protege de infecciones y regula el calor.</p><ul><li><b>Quemadura de 1er Grado:</b> Roja y dolorosa (Epidermis). Ej: Quemadura solar.</li><li><b>Quemadura de 2do Grado:</b> Presencia de ampollas (Flictenas). NUNCA reventarlas.</li><li><b>Quemadura de 3er Grado:</b> Piel negra o blanca, acartonada. No duele en el centro porque los nervios se quemaron.</li></ul></section>
+                <section data-background-color="#f8f9fa"><h2>Control de Hemorragias (Stop The Bleed)</h2><p>En un trauma severo, una persona puede desangrarse en menos de 3 minutos por una arteria rota.</p><table class="tabla-medica"><tr><th>Tipo de Vaso</th><th>Características</th><th>Solución</th></tr><tr><td>Capilar</td><td>Raspón, flujo lento.</td><td>Gasa y lavado.</td></tr><tr><td>Venoso</td><td>Rojo oscuro, flujo continuo.</td><td>Presión directa firme.</td></tr><tr><td>Arterial</td><td>Rojo brillante, sale a chorros rítmicos.</td><td>Torniquete inmediato.</td></tr></table></section>
+                <section data-background-color="#e8f8f5">
+                    <h2>CASO CLÍNICO DE ANÁLISIS</h2>
+                    <p>Llegas a un accidente de moto. El paciente tiene una amputación en la pierna izquierda y sangra a chorros.</p>
+                    <p style="text-align: center; margin-top: 20px;">¿Haces presión directa primero con gasas o vas directo al torniquete?</p>
+                    <h3 class="fragment" style="color: #c0392b; text-align: center; margin-top: 30px;">¡TORNIQUETE INMEDIATO! En hemorragias arteriales masivas (amputaciones), la presión directa te hará perder tiempo vital.</h3>
+                </section>
+                <section data-background-color="#ffffff"><h2>Uso del Torniquete Táctico</h2><p>Solo para extremidades (brazos y piernas).</p><ol><li>Colocar <b>"Alto y Apretado"</b> (High and Tight) o 5-7 cm arriba de la herida.</li><li>Ajustar el velcro bien fuerte ANTES de girar el molinete.</li><li>Girar el molinete hasta que el sangrado arterial se detenga.</li><li>Asegurarlo y anotar la hora. <b>Nunca aflojar.</b></li></ol></section>
+                <section data-background-color="#ffffff"><h2>Video: Colocación de Torniquete</h2>
+                    <p style="text-align: center;">Observa cómo duele. El paciente se quejará, es normal.</p>
+                    <iframe width="600" height="350" src="https://www.youtube.com/embed/MMz_KAqXmj8" title="Torniquete" frameborder="0" allowfullscreen class="video-box"></iframe>
+                </section>
+                <section data-background-color="#f8f9fa"><h2>Empaquetamiento (Wound Packing)</h2><p>Se usa en "Zonas de Unión" (Axila, Ingle, Cuello base) donde no entra un torniquete.</p><ul><li>Introducir gasa hemostática dedo por dedo hasta rellenar todo el agujero de la herida.</li><li>Mantener presión manual directa extremadamente fuerte sobre el empaquetamiento durante 3 a 5 minutos continuos.</li></ul></section>
+                <section data-background-color="#ffffff"><h2 style="color: #27ae60;">PRÁCTICA: Hemorragias y Moulage</h2><p style="text-align: center;"><b>Estaciones de trabajo:</b></p><ol><li>Aplicación del torniquete en compañero (brazo).</li><li>Aplicación de torniquete en uno mismo a una mano.</li><li>Empaquetamiento en cubo simulador de herida profunda.</li></ol><p style="text-align: center; font-weight: bold; font-size: 40px; color: #c0392b; margin-top: 30px;">¡A PRACTICAR!</p></section>
+            </section>
+
+            <!-- ================= CIERRE Y PREMIACIÓN (ACTUALIZADO CON SOCKET) ================= -->
+            <section data-background-color="#f8f9fa">
+                <h2 style="font-size: 60px; border-bottom: none; color: #2c3e50;">Fin de la Simulación</h2>
+                <p style="text-align: center; margin-bottom: 40px;">El sistema ha calculado los puntajes de los Quizzes en tiempo real.</p>
+                
+                <!-- ESTE BOTÓN AHORA LLAMA A LA FUNCIÓN DEL SOCKET -->
+                <button class="btn-activar" onclick="revelarGanadores()" style="background: #e74c3c; width: auto; display: inline-block;">
+                    🏆 Emitir Certificados de Excelencia
+                </button>
+                
+                <div id="resultados" style="display: none; margin-top: 30px;">
+                    <div style="background: white; padding: 20px; border-radius: 15px; border-left: 15px solid #f1c40f; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <p style="margin:0; font-size: 22px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">🥇 Paramédico de Oro (Puntaje Global)</p>
+                        <p id="g-oro" style="margin:5px 0 0 0; font-size: 45px; font-weight: bold; color: #2c3e50;">...</p>
+                    </div>
+                    <div style="display: flex; gap: 15px;">
+                        <div style="background: white; padding: 15px; border-radius: 10px; border-left: 10px solid #3498db; flex: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <p style="margin:0; font-size: 18px; color: #7f8c8d; font-weight: bold;">🧠 Neurólogo Relámpago</p>
+                            <p id="g-neuro" style="margin:5px 0 0 0; font-size: 30px; font-weight: bold; color: #2c3e50;">...</p>
+                        </div>
+                        <div style="background: white; padding: 15px; border-radius: 10px; border-left: 10px solid #e74c3c; flex: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <p style="margin:0; font-size: 18px; color: #7f8c8d; font-weight: bold;">🫀 Corazón de Hierro</p>
+                            <p id="g-corazon" style="margin:5px 0 0 0; font-size: 30px; font-weight: bold; color: #2c3e50;">...</p>
+                        </div>
+                    </div>
+                    <!-- TEXTO ACTUALIZADO -->
+                    <p style="color: #27ae60; font-weight: bold; margin-top: 15px; text-align: center;">¡Los alumnos han recibido su Diploma Digital en sus celulares!</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Inicializa la presentación
+        Reveal.initialize({ hash: true, center: true, progress: true, slideNumber: 'c/t', transition: 'slide' });
+
+        // Conecta al servidor
+        var socket = io('https://simulador-emergencias-mgim.onrender.com', { transports: ['websocket'] });
+
+        // Función para el botón: Habilitar Respuestas
+        function activarPregunta(boton, modulo, respuestaCorrecta) {
+            socket.emit('cambiar_modulo', { nuevo_modulo: modulo, nueva_respuesta: respuestaCorrecta });
+            c1.resize(); c1.update();
+            c2.resize(); c2.update();
+            c3.resize(); c3.update();
+            boton.style.background = "#27ae60";
+            boton.innerText = "✅ ¡Celulares Habilitados!";
+        }
+
+        // Configuración de las gráficas
+        const cOpt = { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } };
+        const cDat = { labels: ['A', 'B', 'C'], datasets: [{ data: [0,0,0], backgroundColor: ['#3498db', '#e74c3c', '#f1c40f'] }] };
+        var c1 = new Chart(document.getElementById('graficoNervioso'), { type: 'bar', data: JSON.parse(JSON.stringify(cDat)), options: cOpt });
+        var c2 = new Chart(document.getElementById('graficoCardio'), { type: 'bar', data: JSON.parse(JSON.stringify(cDat)), options: cOpt });
+        var c3 = new Chart(document.getElementById('graficoMetabolico'), { type: 'bar', data: JSON.parse(JSON.stringify(cDat)), options: cOpt });
+
+        // Actualizar la gráfica en tiempo real
+        socket.on('actualizar_grafico', function(d) {
+            let nd = [d.A, d.B, d.C];
+            c1.data.datasets[0].data = nd; c1.update();
+            c2.data.datasets[0].data = nd; c2.update();
+            c3.data.datasets[0].data = nd; c3.update();
+        });
+
+        // =====================================
+        // BOTÓN FINAL: EMITIR CERTIFICADOS (SOCKET)
+        // =====================================
+        function revelarGanadores() {
+            socket.emit('emitir_certificados');
+        }
+
+        // Si hay error (nadie jugó)
+        socket.on('error_premios', function(d) {
+            alert(d.error);
+        });
+
+        // Mostrar ganadores en el proyector
+        socket.on('mostrar_ganadores', function(d) {
+            document.getElementById('g-oro').innerText = d.oro;
+            document.getElementById('g-neuro').innerText = d.neuro;
+            document.getElementById('g-corazon').innerText = d.corazon;
+            document.getElementById('resultados').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
